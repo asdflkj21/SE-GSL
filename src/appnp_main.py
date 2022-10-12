@@ -99,11 +99,6 @@ if __name__ == '__main__':
         args.learning_rate = 1e-2
         args.weight_decay = 5e-6
         args.drop_rate = 0.5
-    elif args.dataset == 'chameleon' or args.dataset == 'squirrel':
-        args.n_hidden = 48
-        args.learning_rate = 1e-2
-        args.weight_decay = 5e-5
-        args.drop_rate = 0.5
     else:
         # pt tw
         args.n_hidden = 32
@@ -129,8 +124,6 @@ if __name__ == '__main__':
         highest_val_result = [[] for i in range(iteration)]
         highest_test_result = [[] for i in range(iteration)]
         for run in range(runs):
-            if args.dataset == 'actor':
-                args.dataset = 'film'
             split_path = None
             if not args.random_split:
                 split_path = f'splits/{args.dataset}_split_0.6_0.2_{args.split}.npz'

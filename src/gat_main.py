@@ -101,11 +101,6 @@ if __name__ == '__main__':
         args.learning_rate = 1e-2
         args.weight_decay = 5e-6
         args.drop_rate = 0.5
-    elif args.dataset == 'chameleon' or args.dataset == 'squirrel':
-        args.n_hidden = 48
-        args.learning_rate = 1e-2
-        args.weight_decay = 5e-5
-        args.drop_rate = 0.5
     else:
         # pt tw
         args.n_hidden = 32
@@ -138,8 +133,6 @@ if __name__ == '__main__':
         highest_val_result = [[] for i in range(iteration)]
         highest_test_result = [[] for i in range(iteration)]
         for run in range(runs):
-            if args.dataset == 'actor':
-                args.dataset = 'film'
             split_path = None
             if not args.random_split:
                 split_path = f'splits/{args.dataset}_split_0.6_0.2_{args.split}.npz'
@@ -199,17 +192,14 @@ if __name__ == '__main__':
                 if args.dataset in {'cora', 'citeseer', 'pubmed'}:
                     new_edge_index = reshape(community, code_tree, isleaf,
                                              args.k)
-                    print('1:', new_edge_index.shape)
                     new_edge_index_2 = reshape(community, code_tree, isleaf,
                                                args.k)
-                    print('2: ', new_edge_index_2.shape)
                     new_edge_index = torch.concat(
                         (new_edge_index.t(), new_edge_index_2.t()), dim=0)
                     new_edge_index, unique_idx = torch.unique(
                         new_edge_index, return_counts=True, dim=0)
                     new_edge_index = new_edge_index[unique_idx != 1].t()
                     add_num = int(new_edge_index.shape[1])
-                    print('intersection: ', add_num)
 
                     new_edge_index = torch.concat(
                         (new_edge_index.t(), edge_index.cpu()), dim=0)
@@ -226,7 +216,6 @@ if __name__ == '__main__':
                 else:
                     new_edge_index = reshape(community, code_tree, isleaf,
                                              args.k)
-                    print('1:', new_edge_index.shape)
 
                 graph = dgl.graph((new_edge_index[0], new_edge_index[1]),
                                   num_nodes=node_num)
